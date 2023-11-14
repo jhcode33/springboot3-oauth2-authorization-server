@@ -27,6 +27,10 @@ public class Authorization {
     // 권한 부여 유형 (authorization_code, implicit 등)
     private String authorizationGrantType;
 
+    // scope
+    @Column(length = 1000)
+    private String authorizedScopes;
+
     // 권한과 관련된 추가 속성을 저장하는데 사용되는 텍스트 형식의 필드
     @Column(columnDefinition="TEXT")
     private String attributes;
@@ -84,11 +88,11 @@ public class Authorization {
     @Column(columnDefinition="TEXT")
     private String refreshTokenMetadata;
 
-    // OpenId Connect ID Token
-    @Column(columnDefinition="TEXT")
-    private String oidcIdTokenValue;
-
     //== 아래는 필요할 경우 사용 ==//
+//    // OpenId Connect ID Token
+//    @Column(columnDefinition="TEXT")
+//    private String oidcIdTokenValue;
+
 //    // OpenId Connect Id Token 발급 시간
 //    private Instant oidcIdTokenIssuedAt;
 //
