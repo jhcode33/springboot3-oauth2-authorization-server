@@ -88,17 +88,32 @@ public class Authorization {
     @Column(columnDefinition="TEXT")
     private String oidcIdTokenValue;
 
-    // OpenId Connect Id Token 발급 시간
-    private Instant oidcIdTokenIssuedAt;
+    //== 아래는 필요할 경우 사용 ==//
+//    // OpenId Connect Id Token 발급 시간
+//    private Instant oidcIdTokenIssuedAt;
+//
+//    // OpenId Connect Id Token 만료 시간
+//    private Instant oidcIdTokenExpiresAt;
+//
+//    // OpenId Connect Id Token 메타 데이터 저장 필드
+//    @Column(columnDefinition="TEXT")
+//    private String oidcIdTokenMetadata;
+//
+//    // OpenId Connect Id Token 클레임(주장: 사용자 이름, 이메일 등 어떤 정보에 접근할 수 있는지에 대한 정보)
+//    @Column(columnDefinition="TEXT")
+//    private String oidcIdTokenClaims;
 
-    // OpenId Connect Id Token 만료 시간
-    private Instant oidcIdTokenExpiresAt;
-
-    // OpenId Connect Id Token 메타 데이터 저장 필드
-    @Column(columnDefinition="TEXT")
-    private String oidcIdTokenMetadata;
-
-    // OpenId Connect Id Token 클레임(주장: 사용자 이름, 이메일 등 어떤 정보에 접근할 수 있는지에 대한 정보)
-    @Column(columnDefinition="TEXT")
-    private String oidcIdTokenClaims;
+//    @Column(length = 4000)
+//    private String userCodeValue;
+//    private Instant userCodeIssuedAt;
+//    private Instant userCodeExpiresAt;
+//    @Column(length = 2000)
+//    private String userCodeMetadata;
+//
+//    @Column(length = 4000)
+//    private String deviceCodeValue;
+//    private Instant deviceCodeIssuedAt;
+//    private Instant deviceCodeExpiresAt;
+//    @Column(length = 2000)
+//    private String deviceCodeMetadata;
 }

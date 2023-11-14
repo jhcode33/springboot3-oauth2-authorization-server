@@ -1,9 +1,6 @@
 package com.example.springboot3oauth2authorizationserver.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,6 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Data
+@Table(name = "authorizationConsent")
 // AuthorizationConsentId 클래스의 Key를 복합 주키로 사용하겠다고 선언
 @IdClass(AuthorizationConsent.AuthorizationConsentId.class)
 public class AuthorizationConsent implements Serializable {
