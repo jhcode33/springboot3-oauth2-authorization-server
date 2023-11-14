@@ -46,6 +46,10 @@ public class Client {
     @Column(length = 1000)
     private String redirectUris;
 
+    // 로그 아웃 후에 리다이렉트될 URI
+    @Column(length = 1000)
+    private String postLogoutRedirectUris;
+
     // 클라이언트가 요청할 수 있는 정보에 대한 권한
     @Column(length = 1000)
     private String scopes;
