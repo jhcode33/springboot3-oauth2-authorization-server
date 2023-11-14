@@ -2,10 +2,12 @@ package com.example.springboot3oauth2authorizationserver.service;
 
 import com.example.springboot3oauth2authorizationserver.entity.Authorization;
 import com.example.springboot3oauth2authorizationserver.repository.AuthorizationRepository;
+import com.example.springboot3oauth2authorizationserver.security.CustomUserPrincipalMixin;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.security.jackson2.CoreJackson2Module;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +48,11 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
         List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
         this.objectMapper.registerModules(securityModules);
         this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+
+        // Test 중
+        //this.objectMapper.registerModule(new CoreJackson2Module());
+        this.objectMapper.addMixIn(UserPrincipal.class, CustomUserPrincipalMixin.class);
+
     }
 
     @Override

@@ -8,8 +8,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.MissingNode;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomUserPrincipalDeserializer extends JsonDeserializer<CustomUserPrincipal> {
@@ -28,8 +30,16 @@ public class CustomUserPrincipalDeserializer extends JsonDeserializer<CustomUser
         String username = readJsonNode(jsonNode, "username").asText();
         String password = readJsonNode(jsonNode, "password").asText();
 
-        // authorities 필드를 List<GrantedAuthority>로 변환한다
-        List<GrantedAuthority> authorities = mapper.readerForListOf(GrantedAuthority.class).readValue(jsonNode.get("authorities"));
+//      // authorities 필드를 List<GrantedAuthority>로 변환한다
+//         List<GrantedAuthority> authorities = mapper.readerForListOf(GrantedAuthority.class).readValue(jsonNode.get("authorities"));
+        // List를 초기화하지 않아서 발생하는 오류를 방지
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        JsonNode authoritiesNode = jsonNode.at("/java.security.Principal/authorities/1");
+        if (authoritiesNode.isArray()) {
+            for (JsonNode authorityNode : authoritiesNode) {
+                authorities.add(new SimpleGrantedAuthority(authorityNode.get("authority").asText()));
+            }
+        }
 
         // 추출한 데이터를 사용하여 CustomUserPrincipal 객체를 생성하고 반환
         return new CustomUserPrincipal(id, username, password, enable, authorities);
