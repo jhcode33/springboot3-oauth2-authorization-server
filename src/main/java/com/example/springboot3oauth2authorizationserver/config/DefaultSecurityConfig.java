@@ -1,5 +1,6 @@
 package com.example.springboot3oauth2authorizationserver.config;
 
+import com.example.springboot3oauth2authorizationserver.security.JpaUserDetailsManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;

@@ -101,11 +101,11 @@ public class DatabaseLoader {
     }
 
     // 유저 회원가입
-    private void createUser(String email, Role role) {
-        Optional<User> userOptional = userRepository.findByUsername(email);
+    private void createUser(String username, Role role) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
         if(userOptional.isPresent()) return;
         User user = new User();
-        user.setUsername(email);
+        user.setUsername(username);
         user.setPassword(passwordEncoder.encode("password"));
         user.setRole(role);
         user.setActive(Boolean.TRUE);
