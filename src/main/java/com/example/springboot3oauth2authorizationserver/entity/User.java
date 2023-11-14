@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 public class User extends AbstractEntity {
 
     // 아이디 = email
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     // 비밀번호
     @Column(name = "password", nullable = false)
