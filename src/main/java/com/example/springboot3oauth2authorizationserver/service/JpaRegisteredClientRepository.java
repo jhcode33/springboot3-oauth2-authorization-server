@@ -128,7 +128,13 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
 
                 .redirectUris((uris) -> uris.addAll(redirectUris))
                 .postLogoutRedirectUris((uris) -> uris.addAll(postLogoutRedirectUris))
-                .scopes((scopes) -> scopes.addAll(clientScopes));
+                .scopes((scopes) -> scopes.addAll(clientScopes))
+
+                // PKCE
+                .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false)
+                        .requireProofKey(true)
+                        .build());
 
         // null이 아닐 경우에만 변환하도록 if문 사용
         if(client.getClientSettings() != null) {

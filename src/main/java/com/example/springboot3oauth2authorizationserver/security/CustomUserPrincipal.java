@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,20 +23,15 @@ public class CustomUserPrincipal implements UserDetails {
 
     private Long id;
 
-    @JsonIgnore
     private String username;
 
-    @JsonIgnore
     private String password;
 
-    @JsonIgnore
     private Role role;
 
-    @JsonIgnore
     private boolean enable;
 
-    @JsonIgnore
-    private List<GrantedAuthority> authorities;
+    private List<GrantedAuthority> authorities = new ArrayList<>();
 
     public CustomUserPrincipal() {
         super();
@@ -55,6 +51,16 @@ public class CustomUserPrincipal implements UserDetails {
         this.password = password;
         this.role = role;
         this.enable = enable;
+    }
+
+    public CustomUserPrincipal(Long id, String username, String password, Role role, boolean enable, List<GrantedAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.enable = enable;
+        this.authorities = authorities;
+
     }
 
     public static CustomUserPrincipal create(User user){
