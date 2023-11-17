@@ -39,8 +39,6 @@ public class AuthorizationServerConfig {
 
         // OAuth2 AuthorizationServer의 기본 구성을 사용함
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource());
-
 
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 // OpenId Connection 활성화
