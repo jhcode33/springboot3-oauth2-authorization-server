@@ -1,7 +1,7 @@
 package com.example.springboot3oauth2authorizationserver.jose;
 
-import com.nimbusds.jose.jwk.Curve;
-import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.nimbusds.jose.Algorithm;
+import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.ECKey;
 import com.nimbusds.jose.jwk.RSAKey;
 
@@ -29,6 +29,8 @@ public final class Jwks {
         return new RSAKey.Builder(publicKey)
                 .privateKey(privateKey)
                 .keyID(UUID.randomUUID().toString())
+                .keyUse(KeyUse.SIGNATURE)
+                .algorithm(Algorithm.parse("RS256"))
                 .build();
         // @formatter:on
     }
