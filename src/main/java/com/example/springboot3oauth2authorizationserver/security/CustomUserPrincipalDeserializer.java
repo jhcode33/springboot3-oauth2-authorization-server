@@ -1,5 +1,6 @@
 package com.example.springboot3oauth2authorizationserver.security;
 
+import com.example.springboot3oauth2authorizationserver.entity.Role;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -30,19 +31,27 @@ public class CustomUserPrincipalDeserializer extends JsonDeserializer<CustomUser
         String username = readJsonNode(jsonNode, "username").asText();
         String password = readJsonNode(jsonNode, "password").asText();
 
-//      // authorities 필드를 List<GrantedAuthority>로 변환한다
-//         List<GrantedAuthority> authorities = mapper.readerForListOf(GrantedAuthority.class).readValue(jsonNode.get("authorities"));
-        // List를 초기화하지 않아서 발생하는 오류를 방지
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        JsonNode authoritiesNode = jsonNode.at("/java.security.Principal/authorities/1");
-        if (authoritiesNode.isArray()) {
-            for (JsonNode authorityNode : authoritiesNode) {
-                authorities.add(new SimpleGrantedAuthority(authorityNode.get("authority").asText()));
-            }
-        }
+      // authorities 필드를 List<GrantedAuthority>로 변환한다
+        List<GrantedAuthority> authorities = mapper
+                .readerForListOf(GrantedAuthority.class)
+                .readValue(jsonNode.get("authorities"));
+
+        Role role = authorities.isEmpty()
+                ? new Role("ROLE_USER")
+                : new Role(authorities.get(0).getAuthority());
+
+//         List를 초기화하지 않아서 발생하는 오류를 방지
+//        List<GrantedAuthority> authorities = new ArrayList<>();
+//        JsonNode authoritiesNode = jsonNode.at("/authorities/1");
+//        if (authoritiesNode.isArray()) {
+//            for (JsonNode authorityNode : authoritiesNode) {
+//                String authority = authorityNode.get("authority").asText();
+//                authorities.add(new SimpleGrantedAuthority(authority));
+//            }
+//        }
 
         // 추출한 데이터를 사용하여 CustomUserPrincipal 객체를 생성하고 반환
-        return new CustomUserPrincipal(id, username, password, enable, authorities);
+        return new CustomUserPrincipal(id, username, password, role, enable, authorities);
     }
 
     private JsonNode readJsonNode(JsonNode jsonNode, String field) {
