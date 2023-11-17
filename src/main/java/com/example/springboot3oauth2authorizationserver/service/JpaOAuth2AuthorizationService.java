@@ -161,15 +161,15 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
             builder.token(refreshToken, metadata -> metadata.putAll(parseMap(entity.getRefreshTokenMetadata())));
         }
 
-//== 현재는 사용하지 않음 ==//
-//        if (entity.getOidcIdTokenValue() != null) {
-//            OidcIdToken idToken = new OidcIdToken(
-//                    entity.getOidcIdTokenValue(),
-//                    entity.getOidcIdTokenIssuedAt(),
-//                    entity.getOidcIdTokenExpiresAt(),
-//                    parseMap(entity.getOidcIdTokenClaims()));
-//            builder.token(idToken, metadata -> metadata.putAll(parseMap(entity.getOidcIdTokenMetadata())));
-//        }
+        //== Open Id ==//
+        if (entity.getOidcIdTokenValue() != null) {
+            OidcIdToken idToken = new OidcIdToken(
+                    entity.getOidcIdTokenValue(),
+                    entity.getOidcIdTokenIssuedAt(),
+                    entity.getOidcIdTokenExpiresAt(),
+                    parseMap(entity.getOidcIdTokenClaims()));
+            builder.token(idToken, metadata -> metadata.putAll(parseMap(entity.getOidcIdTokenMetadata())));
+        }
 //
 //        if (entity.getUserCodeValue() != null) {
 //            OAuth2UserCode userCode = new OAuth2UserCode(
@@ -243,19 +243,19 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
                 entity::setRefreshTokenMetadata
         );
 
-//== 현재는 사용하지 않음 ==//
-//        OAuth2Authorization.Token<OidcIdToken> oidcIdToken =
-//                authorization.getToken(OidcIdToken.class);
-//        setTokenValues(
-//                oidcIdToken,
-//                entity::setOidcIdTokenValue,
-//                entity::setOidcIdTokenIssuedAt,
-//                entity::setOidcIdTokenExpiresAt,
-//                entity::setOidcIdTokenMetadata
-//        );
-//        if (oidcIdToken != null) {
-//            entity.setOidcIdTokenClaims(writeMap(oidcIdToken.getClaims()));
-//        }
+        //== ID Token ==//
+        OAuth2Authorization.Token<OidcIdToken> oidcIdToken =
+                authorization.getToken(OidcIdToken.class);
+        setTokenValues(
+                oidcIdToken,
+                entity::setOidcIdTokenValue,
+                entity::setOidcIdTokenIssuedAt,
+                entity::setOidcIdTokenExpiresAt,
+                entity::setOidcIdTokenMetadata
+        );
+        if (oidcIdToken != null) {
+            entity.setOidcIdTokenClaims(writeMap(oidcIdToken.getClaims()));
+        }
 //
 //        OAuth2Authorization.Token<OAuth2UserCode> userCode =
 //                authorization.getToken(OAuth2UserCode.class);
