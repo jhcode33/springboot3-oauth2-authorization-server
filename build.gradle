@@ -28,7 +28,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
     implementation 'org.springframework.security:spring-security-cas'
 
-    //implementation 'com.google.code.gson:gson'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // DB
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
