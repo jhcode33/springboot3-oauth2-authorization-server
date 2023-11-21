@@ -89,10 +89,9 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
             result = this.authorizationRepository.findByAccessTokenValue(token);
         } else if (OAuth2ParameterNames.REFRESH_TOKEN.equals(tokenType.getValue())) {
             result = this.authorizationRepository.findByRefreshTokenValue(token);
-
+        } else if (OidcParameterNames.ID_TOKEN.equals(tokenType.getValue())) {
+            result = this.authorizationRepository.findByOidcIdTokenValue(token);
 //== 현재는 사용하지 않음 ==//
-//        } else if (OidcParameterNames.ID_TOKEN.equals(tokenType.getValue())) {
-//            result = this.authorizationRepository.findByOidcIdTokenValue(token);
 //        } else if (OAuth2ParameterNames.USER_CODE.equals(tokenType.getValue())) {
 //            result = this.authorizationRepository.findByUserCodeValue(token);
 //        } else if (OAuth2ParameterNames.DEVICE_CODE.equals(tokenType.getValue())) {

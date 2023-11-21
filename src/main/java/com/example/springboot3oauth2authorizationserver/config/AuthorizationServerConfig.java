@@ -25,6 +25,7 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 /**
@@ -49,12 +50,14 @@ public class AuthorizationServerConfig {
                 // OpenId Connection 활성화
                 .oidc(Customizer.withDefaults()); // Enable OpenId Connection 1.0
 
+        // userinfo 구성
         http.oauth2ResourceServer((oauth2ResourceServer) ->
                 oauth2ResourceServer
                         .jwt((jwt) ->
                                 jwt.decoder(jwtDecoder)
                         )
         );
+
         // 예외 처리 구성
         http.exceptionHandling(exceptions -> exceptions
                 .defaultAuthenticationEntryPointFor(
@@ -77,5 +80,7 @@ public class AuthorizationServerConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(4);
     }
+
+
 
 }
