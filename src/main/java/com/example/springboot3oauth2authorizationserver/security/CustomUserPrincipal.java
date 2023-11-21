@@ -1,11 +1,13 @@
 package com.example.springboot3oauth2authorizationserver.security;
 
+import com.example.springboot3oauth2authorizationserver.dto.JoinDto;
 import com.example.springboot3oauth2authorizationserver.entity.Role;
 import com.example.springboot3oauth2authorizationserver.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +39,7 @@ public class CustomUserPrincipal implements UserDetails {
         super();
     }
 
+
     public CustomUserPrincipal(Long id, String username, String password, boolean enable, List<GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -60,7 +63,6 @@ public class CustomUserPrincipal implements UserDetails {
         this.role = role;
         this.enable = enable;
         this.authorities = authorities;
-
     }
 
     public static CustomUserPrincipal create(User user){
@@ -72,6 +74,7 @@ public class CustomUserPrincipal implements UserDetails {
                 user.getActive()
         );
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -111,4 +114,5 @@ public class CustomUserPrincipal implements UserDetails {
     public Long getId() {
         return id;
     }
+
 }

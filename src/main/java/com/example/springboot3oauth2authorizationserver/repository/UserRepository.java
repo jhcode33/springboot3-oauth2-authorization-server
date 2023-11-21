@@ -1,6 +1,7 @@
 package com.example.springboot3oauth2authorizationserver.repository;
 
 import com.example.springboot3oauth2authorizationserver.entity.User;
+import com.example.springboot3oauth2authorizationserver.security.CustomUserPrincipal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return Optional&lt;User&gt;
      */
     Optional<User> findByUsername(String username);
+
 }
