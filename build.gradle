@@ -2,13 +2,12 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.5'
     id 'io.spring.dependency-management' version '1.1.3'
+    id 'com.palantir.docker' version '0.35.0'
 }
 
 ext {
-    dockerImagePrefix = 'dlcndgjs12'
     springCloudVersion = '2022.0.4'
 }
-
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
@@ -34,11 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
     implementation 'org.springframework.security:spring-security-cas'
 
-    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
     implementation 'org.springframework.security:spring-security-oauth2-client'
-
-
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // DB
@@ -52,8 +47,11 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.named('bootBuildImage') {
-    builder = 'paketobuildpacks/builder-jammy-base:latest'
+docker {
+    name("gopang/${project.name}:${version}")
+    dockerfile file('Dockerfile')
+    files bootJar
+    buildArgs(['JAR_FILE': bootJar.archiveFileName.get()])
 }
 
 tasks.named('test') {
