@@ -1,0 +1,58 @@
+version: '2.1'
+services:
+  database:
+    image: mariadb:latest
+    build:
+      context: D:\development\workspace\boot3-oauth2-authorization-server2\springboot3-oauth2-authorization-server
+      dockerfile: Dockerfile
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: "authorizaiton"
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - ./data:/docker-entrypoint-initdb.d
+    networks:
+      backend:
+        aliases:
+          - "database"
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p1234" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  springboot3oauth2authorizationserver:
+    image: dlcndgjs12/springboot3-oauth2-authorizationserver:0.0.1-SNAPSHOT
+    build:
+      context: D:\development\workspace\boot3-oauth2-authorization-server2\springboot3-oauth2-authorization-server
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    environment:
+      ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
+    networks:
+      backend:
+        aliases:
+          - "authorizationserver"
+#  licensingservice:
+#    image: dlcndgjs12/licensing-service:0.0.1-SNAPSHOT
+#    environment:
+#      PROFILE: "dev"
+#      CONFIGSERVER_URI: "http://configserver:8071"
+#      CONFIGSERVER_PORT:   "8071"
+#      DATABASESERVER_PORT: "5432"
+#      ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo" # "IMSYMMETRIC"
+#    depends_on:
+#      database:
+#        condition: service_healthy
+#      configserver:
+#        condition: service_started
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - backend
+
+networks:
+  backend:
+    driver: bridge
