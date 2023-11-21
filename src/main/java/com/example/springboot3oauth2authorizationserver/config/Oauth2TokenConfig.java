@@ -33,6 +33,7 @@ public class Oauth2TokenConfig {
         jwtGenerator.setJwtCustomizer(jwtCustomizer());
         OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
         OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
+
         return new DelegatingOAuth2TokenGenerator(
                 jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
     }
