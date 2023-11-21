@@ -225,6 +225,8 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
                 entity::setAccessTokenMetadata
         );
 
+        // 엑세스 토큰만 타입이 있음요 따로 설정을 잡아줘야함
+
         // 엑세스 토큰 스코프 설정
         if (accessToken != null && accessToken.getToken().getScopes() != null) {
             entity.setAccessTokenScopes(StringUtils.collectionToDelimitedString(accessToken.getToken().getScopes(), ","));
