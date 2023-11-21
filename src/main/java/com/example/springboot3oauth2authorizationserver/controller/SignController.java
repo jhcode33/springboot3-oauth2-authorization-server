@@ -17,7 +17,7 @@ public class SignController {
 
     private final JoinService joinService;
 
-    @PostMapping("/join")
+    @PostMapping("join")
     public User join(@RequestBody JoinDto joinDto){
         return joinService.save(joinDto);
     }

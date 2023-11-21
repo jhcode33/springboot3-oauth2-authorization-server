@@ -44,14 +44,12 @@ public class DefaultSecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                // 모든 요청에 대해서 인증해야 함
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/join/**", "/login/**").permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/connect/logout")).permitAll()
                                 .anyRequest().permitAll())
-                // 모든 요청에 대해서 인증해야 함
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/connect/logout")).permitAll()
-                        .anyRequest().authenticated()
-                )
+
                 // security에서 제공하는 기본 login 페이지를 활용
                 .formLogin(Customizer.withDefaults());
 
