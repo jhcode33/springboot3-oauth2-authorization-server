@@ -1,4 +1,5 @@
 server:
+  address: localhost
   port: 9090
 
 spring:
@@ -51,6 +52,30 @@ management:
     web:
       exposure:
         include: "*"
+
+  security:
+    oauth2:
+      authorization-server:
+        client:
+          oidc-client:
+            registration:
+              client-id: "demo-client"
+              client-secret: "demo-client-secret"
+              client-authentication-methods:
+                - "client_secret_basic"
+                - "client_secret_post"
+              authorization-grant-types:
+                - "authorization_code"
+                - "refresh_token"
+              redirect-uris:
+                - "http://127.0.0.1:9191/login/oauth2/code/demo-client-oidc"
+                - "http://127.0.0.1:9191/authorized"
+              post-logout-redirect-uris:
+                - "http://127.0.0.1:9191/"
+              scopes:
+                - "openid"
+                - "profile"
+            require-authorization-consent: true
 
 logging:
   level:

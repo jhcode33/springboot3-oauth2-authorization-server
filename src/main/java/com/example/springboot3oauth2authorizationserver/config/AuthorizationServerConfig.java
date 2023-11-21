@@ -1,9 +1,12 @@
 package com.example.springboot3oauth2authorizationserver.config;
 
-import com.example.springboot3oauth2authorizationserver.handler.CustomAccessDeniedHandler;
+import com.example.springboot3oauth2authorizationserver.jose.Jwks;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -11,22 +14,24 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 /**
  *
  * @author gopang
  */
-@EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 public class AuthorizationServerConfig {
@@ -41,18 +46,17 @@ public class AuthorizationServerConfig {
         // OAuth2 AuthorizationServer의 기본 구성을 사용함
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
-
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 // OpenId Connection 활성화
                 .oidc(Customizer.withDefaults()); // Enable OpenId Connection 1.0
 
+        // userinfo 구성
         http.oauth2ResourceServer((oauth2ResourceServer) ->
                 oauth2ResourceServer
                         .jwt((jwt) ->
                                 jwt.decoder(jwtDecoder)
                         )
-                );
-
+        );
 
         // 예외 처리 구성
         http.exceptionHandling(exceptions -> exceptions
@@ -63,7 +67,6 @@ public class AuthorizationServerConfig {
         );
         return http.build();
     }
-
 
     //토큰 발급자(issuer)설정, 발급한 인가 서버를 식별하는데 사용.
     @Bean
@@ -77,6 +80,5 @@ public class AuthorizationServerConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(4);
     }
-
 
 }

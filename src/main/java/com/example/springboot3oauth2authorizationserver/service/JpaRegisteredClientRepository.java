@@ -82,7 +82,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
 
     /**
      * Client를 RegisteredClient 객체로 변환하는 메소드
-     * @param Client
+     * @param // Client
      * @return RegisteredClient
      */
     private RegisteredClient toObject(Client client) {

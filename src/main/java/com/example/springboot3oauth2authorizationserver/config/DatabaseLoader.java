@@ -68,6 +68,10 @@ public class DatabaseLoader {
         redirectUri.add("http://127.0.0.1:9191/login/oauth2/code/demo-client-oidc");
         redirectUri.add("http://127.0.0.1:9191/authorized");
 
+        // 클라이언트의 로그아웃 리다이렉트 URI 설정
+        List<String> postLogoutRedirectUri = new ArrayList<>();
+        postLogoutRedirectUri.add("http://127.0.0.1:9191");
+
         // 클라이언트의 스코프 설정
         List<String> scope = new ArrayList<>();
         scope.add(OidcScopes.OPENID);
@@ -82,6 +86,7 @@ public class DatabaseLoader {
         client.setClientAuthenticationMethods(StringUtils.collectionToCommaDelimitedString(clientAuthenticationMethods));
         client.setAuthorizationGrantTypes(StringUtils.collectionToCommaDelimitedString(authorizationGrantTypes));
         client.setRedirectUris(StringUtils.collectionToCommaDelimitedString(redirectUri));
+        client.setPostLogoutRedirectUris(StringUtils.collectionToCommaDelimitedString(postLogoutRedirectUri));
         client.setScopes(StringUtils.collectionToCommaDelimitedString(scope));
         client.setClientSettings(null);
         client.setTokenSettings(null);
