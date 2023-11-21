@@ -1,12 +1,11 @@
 package com.example.springboot3oauth2authorizationserver.config;
 
+import com.example.springboot3oauth2authorizationserver.handler.CustomAccessDeniedHandler;
 import com.example.springboot3oauth2authorizationserver.security.JpaUserDetailsManager;
 import com.example.springboot3oauth2authorizationserver.service.JpaRegisteredClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +16,8 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -42,11 +43,13 @@ public class DefaultSecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 // 모든 요청에 대해서 인증해야 함
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/connect/logout")).permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers("/join/**", "/login/**").permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/connect/logout")).permitAll()
+                                .anyRequest().permitAll())
+
                 // security에서 제공하는 기본 login 페이지를 활용
                 .formLogin(Customizer.withDefaults());
 

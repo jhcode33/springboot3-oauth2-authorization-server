@@ -81,6 +81,4 @@ public class AuthorizationServerConfig {
         return new BCryptPasswordEncoder(4);
     }
 
-
-
 }
