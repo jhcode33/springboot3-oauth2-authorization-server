@@ -1,5 +1,7 @@
 package com.example.springboot3oauth2authorizationserver.security;
 
+import com.example.springboot3oauth2authorizationserver.dto.JoinDto;
+import com.example.springboot3oauth2authorizationserver.entity.Role;
 import com.example.springboot3oauth2authorizationserver.entity.User;
 import com.example.springboot3oauth2authorizationserver.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +25,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     }
 
     @Override
-    public void createUser(UserDetails user) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public void createUser(UserDetails user) { throw new UnsupportedOperationException("Not supported yet."); }
 
     @Override
     public void updateUser(UserDetails user) {
@@ -48,7 +48,6 @@ public class JpaUserDetailsManager implements UserDetailsManager {
         return this.userRepository.findByUsername(username).isPresent();
     }
 
-    //
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);

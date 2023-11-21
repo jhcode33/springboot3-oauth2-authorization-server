@@ -7,7 +7,6 @@ import com.example.springboot3oauth2authorizationserver.repository.ClientReposit
 import com.example.springboot3oauth2authorizationserver.repository.RoleRepository;
 import com.example.springboot3oauth2authorizationserver.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -110,6 +109,6 @@ public class DatabaseLoader {
         user.setRole(role);
         user.setActive(Boolean.TRUE);
         userRepository.save(user);
-
     }
+
 }

@@ -1,9 +1,11 @@
 package com.example.springboot3oauth2authorizationserver.service;
 
 import com.example.springboot3oauth2authorizationserver.repository.ClientRepository;
+import com.example.springboot3oauth2authorizationserver.security.CustomUserPrincipalMixin;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.security.cas.jackson2.CasJackson2Module;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
 
     private final ClientRepository clientRepository;
 
-    // Jzckson 라이브러리를 사용하여 JSON 데이터를 객체로 변환할 때 사용
+    // Jackson 라이브러리를 사용하여 JSON 데이터를 객체로 변환할 때 사용
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public JpaRegisteredClientRepository(ClientRepository clientRepository) {
@@ -47,7 +50,7 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
         this.objectMapper.registerModules(securityModules);
 
         // Oauth2AuthorizationServerJackson2Module OAuth2 관련 객체들을 Jackson이 올바르게 처리할 수 있도록 하는 모듈
-        this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+        this.objectMapper.addMixIn(UserPrincipal.class, CustomUserPrincipalMixin.class);
     }
 
     /**
@@ -115,6 +118,10 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
                 .clientSecret(client.getClientSecret())
                 .clientSecretExpiresAt(client.getClientSecretExpiresAt())
                 .clientName(client.getClientName())
+                .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false)
+                        .requireProofKey(true)
+                        .build())
 
                 // 문자열 형태를 ClientAuthenticationMethod의 열거형 형태로 변환해서 저장
                 .clientAuthenticationMethods(authenticationMethods ->
@@ -256,6 +263,5 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
         // 일치하는 경우가 없을 경우, 주어진 문자열을 사용하여 반환함
         return new ClientAuthenticationMethod(clientAuthenticationMethod);
     }
-
 
 }

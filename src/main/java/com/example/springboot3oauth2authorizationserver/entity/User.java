@@ -1,9 +1,11 @@
 package com.example.springboot3oauth2authorizationserver.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * 회원 가입 된 사용자 entity
@@ -31,4 +33,13 @@ public class User extends AbstractEntity {
     @Column(name = "active")
     private Boolean active;
 
+    @Builder
+    public User(String username, String password, Role role, Boolean active) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.active = active;
+    }
+
+    public User(){}
 }
