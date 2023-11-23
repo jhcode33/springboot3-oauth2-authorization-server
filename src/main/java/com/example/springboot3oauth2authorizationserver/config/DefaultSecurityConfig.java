@@ -1,9 +1,9 @@
 package com.example.springboot3oauth2authorizationserver.config;
 
-import com.example.springboot3oauth2authorizationserver.handler.CustomAccessDeniedHandler;
+import com.example.springboot3oauth2authorizationserver.repository.ClientRepository;
 import com.example.springboot3oauth2authorizationserver.security.JpaUserDetailsManager;
-import com.example.springboot3oauth2authorizationserver.service.JpaRegisteredClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,12 +12,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,23 +38,26 @@ public class DefaultSecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
     private final JpaUserDetailsManager jpaUserDetailsManager;
-//    private final ClientRegistrationRepository clientRegistrationRepository;
+//    @Autowired private ClientRegistrationRepository clientRegistrationRepository;
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // 모든 요청에 대해서 인증해야 함
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/join/**", "/login/**").permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/connect/logout")).permitAll()
                                 .anyRequest().permitAll())
+//                .oauth2Login(oauthLogin -> oauthLogin.permitAll())
+//                .logout(logout -> logout
+//                        .logoutSuccessHandler(oidcLogoutSuccessHandler())
+//                        .logoutUrl("/logout"))
 
                 // security에서 제공하는 기본 login 페이지를 활용
                 .formLogin(Customizer.withDefaults());
 
-//        http.logout(logout -> logout
-//                .logoutSuccessHandler(oidcLogoutSuccessHandler()));
         return http.build();
 
     }
@@ -68,11 +71,11 @@ public class DefaultSecurityConfig {
         return daoAuthenticationProvider;
     }
 
-//    @Bean
-//    public LogoutSuccessHandler oidcLogoutSuccessHandler() {
+
+//    private LogoutSuccessHandler oidcLogoutSuccessHandler() {
 //        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
 //                new OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository);
-//        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("http://localhost:8081/home");
+//        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("http://127.0.0.1:9191/login/oauth2/code/demo-client-oidc");
 //
 //        return oidcLogoutSuccessHandler;
 //    }
@@ -89,5 +92,4 @@ public class DefaultSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
