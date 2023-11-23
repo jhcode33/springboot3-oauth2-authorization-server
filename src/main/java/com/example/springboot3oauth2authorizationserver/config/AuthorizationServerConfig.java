@@ -81,4 +81,9 @@ public class AuthorizationServerConfig {
         return new BCryptPasswordEncoder(4);
     }
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }

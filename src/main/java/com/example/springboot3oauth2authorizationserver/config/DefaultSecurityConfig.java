@@ -43,6 +43,7 @@ public class DefaultSecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
+                // csrf 비활성화
                 .csrf(csrf -> csrf.disable())
                 // 모든 요청에 대해서 인증해야 함
                 .authorizeHttpRequests(authorize ->
