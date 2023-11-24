@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3307/authorization
+    url: jdbc:mariadb://database:3306/authorization
     username: root
     password: 1234
     driver-class-name: org.mariadb.jdbc.Driver

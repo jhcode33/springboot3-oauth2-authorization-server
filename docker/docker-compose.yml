@@ -2,26 +2,30 @@ version: '2.1'
 services:
   database:
     image: mariadb:latest
-    build:
-      context: D:\development\workspace\boot3-oauth2-authorization-server2\springboot3-oauth2-authorization-server
-      dockerfile: Dockerfile
+#    build:
+#      context: D:\development\workspace\boot3-oauth2-authorization-server2\springboot3-oauth2-authorization-server
+#      dockerfile: Dockerfile
     ports:
-      - "3307:3307"
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: "1234"
-      MYSQL_DATABASE: "authorizaiton"
+        MARIADB_DATABASE: "authorizaiton"
+#        MARIADB_USER: "user"
+#        MARIADB_PASSWORD: "password"
+        MARIADB_ROOT_USER: "root"
+        MARIADB_ROOT_PASSWORD: "1234"
     volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
-      - ./data:/docker-entrypoint-initdb.d
+      - ./initdb/init.sql:/docker-entrypoint-initdb.d/init.sql
+#      - ./initdb:/docker-entrypoint-initdb.d
+#      - ./data:/docker-entrypoint-initdb.d
     networks:
       backend:
         aliases:
           - "database"
     healthcheck:
-      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p1234" ]
-      interval: 10s
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 1m
       timeout: 5s
-      retries: 5
+      retries: 3
   springboot3oauth2authorizationserver:
     image: dlcndgjs12/springboot3-oauth2-authorizationserver:0.0.1-SNAPSHOT
     build:
@@ -31,6 +35,9 @@ services:
       - "9090:9090"
     environment:
       ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
+    depends_on:
+      database:
+        condition: service_healthy
     networks:
       backend:
         aliases:

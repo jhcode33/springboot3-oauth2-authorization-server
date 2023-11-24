@@ -28,4 +28,4 @@ COPY --from=build ${build}/META-INF /app/META-INF
 COPY --from=build ${build}/BOOT-INF/classes /app
 
 #execute the application
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.optimagrowth.license.LicenseServiceApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.example.springboot3oauth2authorizationserver.Springboot3Oauth2AuthorizationServerApplication"]

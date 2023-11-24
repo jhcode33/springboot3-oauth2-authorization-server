@@ -50,6 +50,7 @@ public class AuthorizationServerConfig {
                 // OpenId Connection 활성화
                 .oidc(Customizer.withDefaults()); // Enable OpenId Connection 1.0
 
+
         // userinfo 구성
         http.oauth2ResourceServer((oauth2ResourceServer) ->
                 oauth2ResourceServer
@@ -80,5 +81,7 @@ public class AuthorizationServerConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(4);
     }
+
+
 
 }
