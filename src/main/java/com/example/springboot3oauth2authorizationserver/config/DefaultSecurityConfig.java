@@ -52,7 +52,8 @@ public class DefaultSecurityConfig {
                                 .anyRequest().permitAll())
 
                 // security에서 제공하는 기본 login 페이지를 활용
-                .formLogin(Customizer.withDefaults());
+                .formLogin(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
 //        http.logout(logout -> logout
 //                .logoutSuccessHandler(oidcLogoutSuccessHandler()));
@@ -81,13 +82,23 @@ public class DefaultSecurityConfig {
     //== CORS ==/
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PATCH", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("*"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PATCH", "DELETE"));
+//        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+
+
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", config); /*configuration);*/
         return source;
     }
 

@@ -7,6 +7,7 @@ import com.example.springboot3oauth2authorizationserver.repository.RoleRepositor
 import com.example.springboot3oauth2authorizationserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +16,7 @@ public class JoinService {
 
     private final UserRepository userRepository;
     private final RoleRepository repository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     public User save(JoinDto joinDto){
